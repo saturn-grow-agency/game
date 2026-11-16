@@ -1,0 +1,620 @@
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;0,9..144,700;1,9..144,500&family=Nunito:wght@400;600;700;800&family=Caveat:wght@600;700&display=swap');
+:root{
+  --papel:#fdf6e3; --creme:#fffaf0; --tinta:#22301f; --tinta-suave:#4a5a48;
+  --verde-esc:#2d4a2d; --verde:#5a8f5a; --verde-cl:#a8d5a2; --ceu:#bfe8f5;
+  --sol:#e9c46a; --terracota:#e76f51; --terracota-cl:#f4a261; --agua:#7ec8c9;
+  --card-borda:#2b3a29; --sombra:0 18px 50px rgba(45,74,45,.18);
+  --raio:22px;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0; font-family:'Nunito',system-ui,sans-serif; color:var(--tinta);
+  background:var(--papel); text-align:left; overflow-x:hidden;
+  background-image:radial-gradient(rgba(90,143,90,.08) 1.5px, transparent 1.5px);
+  background-size:26px 26px;
+}
+h1,h2,h3{font-family:'Fraunces',serif; line-height:1.05; margin:0}
+.hand{font-family:'Caveat',cursive}
+a{color:inherit}
+img{max-width:100%; display:block}
+/* ---------- util ---------- */
+.wrap{max-width:1160px; margin:0 auto; padding:0 22px}
+section{padding:84px 0}
+.eyebrow{
+  display:inline-flex; align-items:center; gap:8px;
+  background:#fff; border:2px solid var(--card-borda); border-radius:999px;
+  padding:6px 14px; font-weight:800; font-size:13px; letter-spacing:.12em; text-transform:uppercase;
+  box-shadow:3px 3px 0 var(--card-borda);
+}
+.sec-title{font-size:clamp(30px,4.5vw,52px); margin:16px 0 10px; letter-spacing:-.02em}
+.sec-sub{font-size:18px; color:var(--tinta-suave); max-width:680px; line-height:1.6}
+.btn{
+  display:inline-flex; align-items:center; gap:10px; cursor:pointer; text-decoration:none;
+  font-weight:800; border:2px solid var(--card-borda); border-radius:999px;
+  padding:14px 26px; font-size:16px; transition:.2s; box-shadow:4px 4px 0 var(--card-borda);
+}
+.btn:hover{transform:translate(-1px,-2px); box-shadow:6px 6px 0 var(--card-borda)}
+.btn:active{transform:translate(2px,2px); box-shadow:1px 1px 0 var(--card-borda)}
+.btn-verde{background:var(--verde-esc); color:#fff}
+.btn-creme{background:#fff; color:var(--tinta)}
+.btn-sol{background:var(--sol); color:var(--tinta)}
+.btn-mini{padding:9px 18px; font-size:14px}
+/* ---------- loader ---------- */
+#loaderCtn{
+  position:fixed; inset:0; z-index:200; background:var(--papel);
+  display:flex; flex-direction:column; align-items:center; justify-content:center; gap:18px;
+  transition:opacity .6s;
+}
+#loaderCtn.hide{opacity:0; pointer-events:none}
+.folha{font-size:54px; animation:flutua 1.6s ease-in-out infinite}
+@keyframes flutua{0%,100%{transform:translateY(0) rotate(-8deg)}50%{transform:translateY(-14px) rotate(8deg)}}
+.load-bar{width:210px; height:10px; border:2px solid var(--card-borda); border-radius:99px; overflow:hidden; background:#fff}
+.load-bar i{display:block; height:100%; width:40%; background:var(--verde); border-radius:99px; animation:anda 1s infinite}
+@keyframes anda{0%{margin-left:-40%}100%{margin-left:100%}}
+/* ---------- nav ---------- */
+nav{
+  position:fixed; top:14px; left:50%; transform:translateX(-50%); z-index:100;
+  width:min(1160px, calc(100% - 20px));
+  background:rgba(255,250,240,.88); backdrop-filter:blur(14px);
+  border:2px solid var(--card-borda); border-radius:18px; box-shadow:var(--sombra);
+  display:flex; align-items:center; gap:14px; padding:10px 14px;
+}
+.logo{display:flex; align-items:center; gap:10px; text-decoration:none; font-weight:900}
+.logo-marca{
+  width:42px; height:42px; border-radius:50%; border:2px solid var(--card-borda);
+  background:radial-gradient(circle at 30% 30%, #fff 0 18%, var(--verde-cl) 19% 45%, var(--verde) 46% 100%);
+  display:grid; place-items:center; font-size:22px;
+}
+.logo small{display:block; font-size:11px; letter-spacing:.18em; opacity:.7}
+.logo b{font-family:'Fraunces',serif; font-size:20px}
+.nav-links{display:flex; gap:4px; margin-left:auto; flex-wrap:wrap}
+.nav-links a{text-decoration:none; font-weight:700; font-size:14px; padding:8px 12px; border-radius:10px}
+.nav-links a:hover{background:#eef5e6}
+#menuBtn{display:none; margin-left:auto; border:2px solid var(--card-borda); background:#fff; border-radius:10px; padding:8px 12px; font-weight:800; cursor:pointer}
+@media(max-width:900px){
+  .nav-links{display:none; position:absolute; top:64px; left:0; right:0; background:var(--creme); border:2px solid var(--card-borda); border-radius:14px; padding:10px; flex-direction:column}
+  .nav-links.open{display:flex}
+  #menuBtn{display:block}
+  #navCta{display:none}
+}
+/* ---------- hero ---------- */
+.hero{
+  position:relative; min-height:100svh; display:flex; align-items:end;
+  padding:130px 0 0; overflow:hidden; isolation:isolate;
+  background:linear-gradient(180deg,#8fd0ef 0%, #cdeefb 32%, #e9f7df 62%, var(--papel) 100%);
+}
+.hero-bg{
+  position:absolute; inset:0; z-index:-2;
+  background:url('src/images/hero-vale.jpg') center/cover no-repeat;
+  mask-image:linear-gradient(180deg, black 62%, transparent 99%);
+  -webkit-mask-image:linear-gradient(180deg, black 62%, transparent 99%);
+}
+.hero-veu{position:absolute; inset:0; z-index:-1; background:linear-gradient(180deg, rgba(143,208,239,.25) 0%, transparent 40%, rgba(253,246,227,.55) 78%, var(--papel) 100%)}
+.nuvem{position:absolute; background:#fff; border-radius:999px; opacity:.9; filter:blur(1px); z-index:-1; animation:deriva linear infinite}
+.nuvem::before,.nuvem::after{content:""; position:absolute; background:#fff; border-radius:50%}
+.nuvem::before{width:60%; height:140%; left:15%; top:-70%}
+.nuvem::after{width:40%; height:100%; right:12%; top:-45%}
+@keyframes deriva{from{transform:translateX(-15vw)}to{transform:translateX(115vw)}}
+.hero-grid{display:grid; grid-template-columns:1.05fr .95fr; gap:34px; align-items:end; width:100%}
+@media(max-width:920px){.hero-grid{grid-template-columns:1fr}}
+.hero-card{
+  background:rgba(255,250,240,.92); border:2px solid var(--card-borda); border-radius:28px;
+  padding:30px 30px 26px; box-shadow:8px 8px 0 var(--card-borda); margin-bottom:34px;
+}
+.hero-card h1{font-size:clamp(42px,6vw,74px); letter-spacing:-.03em}
+.hero-card h1 em{font-style:italic; color:var(--verde-esc); position:relative}
+.hero-vento{font-family:'Caveat',cursive; font-size:24px; color:#3a6b3a; margin:10px 0 0}
+.hero-desc{font-size:17px; line-height:1.65; color:var(--tinta-suave); margin:14px 0 20px}
+.hero-acoes{display:flex; gap:12px; flex-wrap:wrap}
+.hero-stats{display:flex; gap:18px; flex-wrap:wrap; margin-top:20px; padding-top:18px; border-top:2px dashed #c9d8c2}
+.hero-stats div b{font-size:22px; font-family:'Fraunces',serif}
+.hero-stats div span{font-size:13px; opacity:.75; display:block}
+.hero-lateral{margin-bottom:34px; display:flex; flex-direction:column; gap:14px}
+.postal{
+  background:#fff; border:2px solid var(--card-borda); border-radius:18px; padding:12px;
+  box-shadow:6px 6px 0 var(--card-borda); transform:rotate(1.5deg);
+}
+.postal img{border-radius:12px; border:2px solid var(--card-borda); aspect-ratio:16/9; object-fit:cover; width:100%}
+.postal figcaption{display:flex; justify-content:space-between; align-items:center; padding:10px 4px 2px; font-weight:700; font-size:14px}
+.frase-card{
+  background:var(--verde-esc); color:#fdf6e3; border:2px solid var(--card-borda);
+  border-radius:18px; padding:16px 18px; box-shadow:6px 6px 0 var(--card-borda); transform:rotate(-1deg);
+}
+.frase-card small{letter-spacing:.15em; font-size:11px; opacity:.8; font-weight:800}
+.frase-card p{font-family:'Caveat',cursive; font-size:26px; margin:6px 0 0; line-height:1.2}
+.controles-flutuantes{display:flex; gap:10px; flex-wrap:wrap}
+.chip-btn{
+  border:2px solid var(--card-borda); background:#fff; border-radius:999px; padding:9px 16px;
+  font-weight:800; font-size:14px; cursor:pointer; box-shadow:3px 3px 0 var(--card-borda);
+}
+.chip-btn.ativo{background:var(--sol)}
+.faixa{
+  background:var(--verde-esc); color:#fdf6e3; border-block:2px solid var(--card-borda);
+  overflow:hidden; white-space:nowrap; padding:12px 0; font-weight:800;
+}
+.faixa span{display:inline-block; padding:0 18px; animation:marquee 22s linear infinite}
+@keyframes marquee{to{transform:translateX(-50%)}}
+/* ---------- cards mundo ---------- */
+.mundo-grid{display:grid; grid-template-columns:repeat(4,1fr); gap:18px; margin-top:28px}
+@media(max-width:1000px){.mundo-grid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:560px){.mundo-grid{grid-template-columns:1fr}}
+.regiao{
+  background:#fff; border:2px solid var(--card-borda); border-radius:var(--raio);
+  overflow:hidden; box-shadow:5px 5px 0 var(--card-borda); transition:.25s; display:flex; flex-direction:column;
+}
+.regiao:hover{transform:translateY(-6px) rotate(-.4deg)}
+.regiao img{height:180px; width:100%; object-fit:cover; border-bottom:2px solid var(--card-borda)}
+.regiao div{padding:18px}
+.regiao h3{font-size:22px; margin-bottom:6px}
+.regiao p{font-size:15px; line-height:1.6; color:var(--tinta-suave); margin:0 0 12px}
+.tag{display:inline-block; font-size:12px; font-weight:800; background:#eef5e6; border:1.5px solid var(--card-borda); border-radius:99px; padding:4px 10px; margin:0 6px 6px 0}
+/* ---------- herois ---------- */
+#herois{background:linear-gradient(180deg, var(--papel), #eef6e6 50%, var(--papel))}
+.herois-grid{display:grid; grid-template-columns:repeat(3,1fr); gap:20px; margin-top:28px}
+@media(max-width:900px){.herois-grid{grid-template-columns:1fr; max-width:520px; margin-inline:auto}}
+.heroi{background:#fff; border:2px solid var(--card-borda); border-radius:26px; overflow:hidden; box-shadow:6px 6px 0 var(--card-borda)}
+.heroi img{height:360px; width:100%; object-fit:cover; object-position:top; border-bottom:2px solid var(--card-borda)}
+.heroi-corpo{padding:20px}
+.heroi-corpo h3{font-size:26px}
+.heroi-corpo .papel{font-family:'Caveat',cursive; font-size:20px; color:var(--terracota); font-weight:700}
+.barra{margin:10px 0}
+.barra label{font-size:13px; font-weight:800; display:flex; justify-content:space-between}
+.trilho{height:10px; background:#eee9d6; border:1.5px solid var(--card-borda); border-radius:99px; overflow:hidden; margin-top:4px}
+.trilho i{display:block; height:100%; background:linear-gradient(90deg, var(--verde), var(--sol)); border-radius:99px}
+/* ---------- espiritos ---------- */
+.esp-grid{display:grid; grid-template-columns:repeat(4,1fr); gap:16px; margin-top:26px}
+@media(max-width:1000px){.esp-grid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:520px){.esp-grid{grid-template-columns:1fr}}
+.esp{background:#fff; border:2px solid var(--card-borda); border-radius:20px; padding:18px; box-shadow:4px 4px 0 var(--card-borda); text-align:center; transition:.2s}
+.esp:hover{transform:scale(1.03)}
+.esp .icone{font-size:44px}
+.esp h3{font-size:19px; margin:8px 0 6px}
+.esp p{font-size:14px; color:var(--tinta-suave); line-height:1.55; margin:0}
+.raridade{font-size:11px; font-weight:800; letter-spacing:.1em; text-transform:uppercase; border-radius:99px; padding:4px 10px; display:inline-block; margin-top:10px; border:1.5px solid var(--card-borda)}
+.r-comum{background:#e8f5e9} .r-raro{background:#fff3c4} .r-lendario{background:#ffd9c7}
+/* ---------- sistemas ---------- */
+.sis-layout{display:grid; grid-template-columns:1fr 1fr; gap:24px; margin-top:28px; align-items:start}
+@media(max-width:900px){.sis-layout{grid-template-columns:1fr}}
+.sis-foto{position:sticky; top:90px}
+.sis-foto img{border-radius:24px; border:2px solid var(--card-borda); box-shadow:8px 8px 0 var(--card-borda); width:100%; aspect-ratio:4/3; object-fit:cover}
+.sis-lista{display:grid; gap:14px}
+.sis{background:#fff; border:2px solid var(--card-borda); border-radius:18px; padding:18px 20px; box-shadow:4px 4px 0 var(--card-borda); display:flex; gap:14px}
+.sis .ico{font-size:30px; flex-shrink:0; width:54px; height:54px; display:grid; place-items:center; background:var(--papel); border:2px solid var(--card-borda); border-radius:14px}
+.sis h3{margin:0 0 4px; font-size:19px}
+.sis p{margin:0; color:var(--tinta-suave); font-size:15px; line-height:1.6}
+/* ---------- demo ---------- */
+#demo{background:var(--verde-esc); color:#fdf6e3; border-block:2px solid var(--card-borda); position:relative; overflow:hidden}
+#demo .sec-sub{color:#d6e8d0}
+#demo .eyebrow{background:var(--sol); color:var(--tinta)}
+.demo-tabs{display:flex; gap:10px; flex-wrap:wrap; margin:24px 0}
+.demo-tabs button{border:2px solid #fdf6e3; background:transparent; color:#fdf6e3; border-radius:99px; padding:10px 20px; font-weight:800; cursor:pointer}
+.demo-tabs button.ativo{background:#fdf6e3; color:var(--verde-esc)}
+.painel{display:none; background:var(--creme); color:var(--tinta); border:2px solid var(--card-borda); border-radius:24px; padding:26px; box-shadow:8px 8px 0 rgba(0,0,0,.35)}
+.painel.ativo{display:block; animation:entra .4s}
+@keyframes entra{from{opacity:0; transform:translateY(12px)}to{opacity:1; transform:none}}
+.ficha{display:grid; grid-template-columns:220px 1fr; gap:20px; align-items:center; margin-top:18px}
+@media(max-width:640px){.ficha{grid-template-columns:1fr}}
+.ficha-avatar{width:100%; aspect-ratio:1; border-radius:18px; border:2px solid var(--card-borda); display:grid; place-items:center; font-size:90px; background:linear-gradient(135deg,#e9f7df,#cdeefb)}
+.ficha h3{font-size:30px}
+.ficha p{line-height:1.7}
+.missao-caixa{background:#fff; border:2px dashed var(--card-borda); border-radius:16px; padding:20px; margin-top:16px; font-size:17px; line-height:1.7}
+#sparkCtn{position:relative; background:#10240f; border:2px solid var(--card-borda); border-radius:18px; overflow:hidden; margin-top:16px}
+#sparkCanvas{display:block; width:100%; height:380px; cursor:crosshair; touch-action:none}
+.spark-hud{display:flex; justify-content:space-between; align-items:center; padding:12px 16px; background:#fff; border-top:2px solid var(--card-borda); color:var(--tinta); font-weight:800; flex-wrap:wrap; gap:10px}
+/* ---------- galeria ---------- */
+.gal-grid{display:grid; grid-template-columns:repeat(3,1fr); gap:16px; margin-top:26px}
+@media(max-width:800px){.gal-grid{grid-template-columns:1fr 1fr}}
+@media(max-width:520px){.gal-grid{grid-template-columns:1fr}}
+.gal-grid figure{margin:0; border:2px solid var(--card-borda); border-radius:18px; overflow:hidden; background:#fff; box-shadow:4px 4px 0 var(--card-borda)}
+.gal-grid img{height:220px; width:100%; object-fit:cover; transition:.4s}
+.gal-grid figure:hover img{transform:scale(1.05)}
+.gal-grid figcaption{padding:12px 14px; font-weight:700; font-size:14px; display:flex; justify-content:space-between}
+/* ---------- jogar ---------- */
+.jogar-box{display:grid; grid-template-columns:1.1fr .9fr; gap:22px; margin-top:26px}
+@media(max-width:900px){.jogar-box{grid-template-columns:1fr}}
+.plataformas{display:grid; gap:12px}
+.plat{background:#fff; border:2px solid var(--card-borda); border-radius:16px; padding:16px 18px; display:flex; align-items:center; gap:14px; box-shadow:4px 4px 0 var(--card-borda)}
+.plat b{display:block} .plat small{color:var(--tinta-suave)}
+.news{background:var(--verde-esc); color:#fff; border:2px solid var(--card-borda); border-radius:20px; padding:24px; box-shadow:6px 6px 0 var(--card-borda)}
+.news input{width:100%; padding:13px 16px; border-radius:12px; border:2px solid var(--card-borda); font-size:15px; margin:12px 0}
+details{background:#fff; border:2px solid var(--card-borda); border-radius:14px; padding:14px 18px; margin-top:10px}
+details summary{cursor:pointer; font-weight:800}
+footer{background:#1d2a1d; color:#e9f0e3; padding:50px 0 30px; border-top:2px solid var(--card-borda)}
+footer a{color:#e9f0e3}
+.foot-grid{display:grid; grid-template-columns:1.2fr 1fr 1fr; gap:20px}
+@media(max-width:760px){.foot-grid{grid-template-columns:1fr}}
+.reveal{opacity:0; transform:translateY(24px); transition:.7s}
+.reveal.vis{opacity:1; transform:none}
+#topoBtn{position:fixed; right:18px; bottom:18px; z-index:90; width:52px; height:52px; border-radius:50%; border:2px solid var(--card-borda); background:var(--sol); font-size:22px; cursor:pointer; box-shadow:3px 3px 0 var(--card-borda); display:none}
+.susuwatari{position:fixed; z-index:80; pointer-events:none; font-size:18px; transition:transform .3s}
+body.crepusculo{--papel:#2b2f4a; --creme:#2e3350; --tinta:#fdf6e3; --tinta-suave:#c9cbe0; background-color:#232742}
+body.crepusculo .hero{background:linear-gradient(180deg,#3b3a6b 0%, #7a5a8e 45%, #2b2f4a 100%)}
+body.crepusculo nav, body.crepusculo .hero-card, body.crepusculo .regiao, body.crepusculo .heroi, body.crepusculo .esp, body.crepusculo .sis, body.crepusculo .painel, body.crepusculo details{background:#2e3350; color:#fdf6e3}
+body.crepusculo .sec-sub, body.crepusculo .regiao p, body.crepusculo .sis p{color:#c9cbe0}
+</style>
+
+<div id="loaderCtn"><div class="folha">🍃</div><b>LUMÉA</b><div class="load-bar"><i></i></div><small>regando o vale...</small></div>
+
+<nav>
+  <a class="logo" href="#topo"><span class="logo-marca">🌱</span><span><small>UM RPG DE ACONCHEGO</small><b>Luméa</b></span></a>
+  <div class="nav-links" id="navLinks">
+    <a href="#sobre">História</a><a href="#mundo">Mundo</a><a href="#herois">Heróis</a><a href="#espiritos">Espíritos</a><a href="#sistemas">Sistemas</a><a href="#demo">Demo</a><a href="#jogar">Jogar</a>
+  </div>
+  <button id="menuBtn" onclick="document.getElementById('navLinks').classList.toggle('open')">☰</button>
+  <a id="navCta" class="btn btn-verde btn-mini" href="#jogar">✨ Jogar grátis</a>
+</nav>
+
+<header class="hero" id="topo">
+  <div class="hero-bg"></div><div class="hero-veu"></div>
+  <div class="nuvem" style="top:14%; width:140px; height:44px; animation-duration:55s"></div>
+  <div class="nuvem" style="top:24%; width:200px; height:60px; animation-duration:80s; animation-delay:-30s"></div>
+  <div class="nuvem" style="top:9%; width:110px; height:36px; animation-duration:45s; animation-delay:-15s"></div>
+  <div class="wrap hero-grid">
+    <div class="hero-card">
+      <span class="eyebrow">🍃 Inspirado no Studio Ghibli • Demo disponível</span>
+      <h1>LUMÉA <em>Sussurros do Vale</em></h1>
+      <p class="hand hero-vento">o vento sumiu — e só quem cuida pode trazê-lo de volta.</p>
+      <p class="hero-desc">Um RPG de aconchego, coragem e culinária. Explore um vale pintado à mão, faça amizade com kodamas, cozinhe sopas que curam, plante jardins e costure o céu de volta com a sua ocarina.</p>
+      <div class="hero-acoes">
+        <a class="btn btn-verde" href="#demo">▶ Jogar demo no navegador</a>
+        <a class="btn btn-creme" href="#mundo">Explorar o vale</a>
+      </div>
+      <div class="hero-stats">
+        <div><b>40h+</b><span>de história principal</span></div>
+        <div><b>120+</b><span>espíritos para befriender</span></div>
+        <div><b>0</b><span>game over — aqui se cuida</span></div>
+        <div><b>★ 4.9</b><span>festival indie 2026</span></div>
+      </div>
+    </div>
+    <div class="hero-lateral">
+      <figure class="postal"><img src="src/images/hero-vale.jpg" alt="Vale Verdejante de Luméa"><figcaption><span>📍 Vale Verdejante, manhã</span><span class="hand">nº 01</span></figcaption></figure>
+      <div class="frase-card"><small>✦ FRASE DO VENTO — RECARREGUE PARA OUVIR OUTRA</small><p>[fraseDoVento]</p></div>
+      <div class="controles-flutuantes">
+        <button class="chip-btn" id="musicaBtn" onclick="alternarMusica()">🎵 ouvir tema do vale</button>
+        <button class="chip-btn" id="noiteBtn" onclick="document.body.classList.toggle('crepusculo')">🌙 modo crepúsculo</button>
+      </div>
+      <audio id="musicaEl" loop preload="auto" src="https://user.uploads.dev/file/ba9e90403a9cb9e1a6a63ac1844909e9.mp3"></audio>
+    </div>
+  </div>
+</header>
+
+<div class="faixa"><span>🌾 sem lutas obrigatórias ✦ cozinhe para curar ✦ befriende espíritos ✦ plante com as estações ✦ chova com a Yaya ✦ voe com pipas ✦ 🌾 sem lutas obrigatórias ✦ cozinhe para curar ✦ befriende espíritos ✦ plante com as estações ✦</span></div>
+
+<section id="sobre"><div class="wrap">
+  <span class="eyebrow reveal">📖 A história</span>
+  <h2 class="sec-title reveal">O vento adormeceu.<br>O vale precisa de você.</h2>
+  <p class="sec-sub reveal">Há cem anos o Grande Vento costurava nuvens, carregava sementes e ninava os espíritos. Uma manhã, ele simplesmente... parou. Os moinhos calaram, as pipas caíram, os kodamas perderam o brilho. Você chega ao Vale Partido com uma ocarina rachada e uma receita de sopa no bolso. Não é a heroína escolhida — é só alguém que ficou para cuidar.</p>
+  <div class="mundo-grid">
+    <div class="regiao reveal"><div style="padding:18px"><div style="font-size:34px">🧭</div><h3>Explorar sem pressa</h3><p>Caminhe, nade, plane com a pipa. O mapa se abre com gentileza, não com torres. Cada trilha tem um piquenique esperando.</p></div></div>
+    <div class="regiao reveal"><div style="padding:18px"><div style="font-size:34px">🍲</div><h3>Cuidar é poder</h3><p>Cozinhe, regue, conserte cercas. Pratos quentes viram magia: curam, acalmam tempestades e fazem amizade com espíritos.</p></div></div>
+    <div class="regiao reveal"><div style="padding:18px"><div style="font-size:34px">💛</div><h3>Amizade de verdade</h3><p>Espíritos lembram do seu nome, do seu chá favorito e se você voltou na chuva. Vínculo vale mais que nível.</p></div></div>
+    <div class="regiao reveal"><div style="padding:18px"><div style="font-size:34px">🌦️</div><h3>Um mundo vivo</h3><p>Chuva, vento, estações e noite estrelada mudam tudo: rotas, receitas, espíritos e músicas da ocarina.</p></div></div>
+  </div>
+</div></section>
+
+<section id="mundo" style="padding-top:20px"><div class="wrap">
+  <span class="eyebrow reveal">🗺️ O mundo</span>
+  <h2 class="sec-title reveal">Quatro cantos para se perder por gosto</h2>
+  <p class="sec-sub reveal">Todo cenário foi pintado como aquarela e depois ganhou vida: grama que deita com o vento, água que reflete lanternas, poeira que dança no sol.</p>
+  <div class="mundo-grid">
+    <article class="regiao reveal"><img src="src/images/hero-vale.jpg" alt="Vale Verdejante" loading="lazy"><div><span class="tag">🌱 inicial</span><span class="tag">fácil</span><h3>Vale Verdejante</h3><p>Arrozais, moinhos e a Vila Pão-Quente. Aprenda a cozinhar, a regar e a ouvir. Tutorial que abraça.</p></div></article>
+    <article class="regiao reveal"><img src="src/images/floresta.jpg" alt="Floresta Sussurrante" loading="lazy"><div><span class="tag">🌲 kodamas</span><span class="tag">névoa</span><h3>Floresta Sussurrante</h3><p>Cedros milenares e fagulhas tímidas. Ande devagar, leve chá. Quem corre assusta o brilho.</p></div></article>
+    <article class="regiao reveal"><img src="src/images/ilhas.jpg" alt="Ilhas de Nimu" loading="lazy"><div><span class="tag">🪁 voo</span><span class="tag">vento</span><h3>Ilhas de Nimu</h3><p>Ilhas flutuantes com cachoeiras que caem para as nuvens. Pipas, pontes de corda e correio sapo.</p></div></article>
+    <article class="regiao reveal"><img src="src/images/termas.jpg" alt="Termas de Yoru" loading="lazy"><div><span class="tag">🏮 noite</span><span class="tag">festa</span><h3>Termas de Yoru</h3><p>Banhos de vapor, barquinhos de vela e festival de lanternas. Espíritos cansados vêm descansar aqui.</p></div></article>
+  </div>
+</div></section>
+
+<section id="herois"><div class="wrap">
+  <span class="eyebrow reveal">🧑‍🌾 Os heróis</span>
+  <h2 class="sec-title reveal">Não são escolhidos. São gentis.</h2>
+  <p class="sec-sub reveal">Escolha com quem começar — mas todos se juntam à sua caravana no primeiro outono. Cada um abre receitas, músicas e caminhos.</p>
+  <div class="herois-grid">
+    <article class="heroi reveal"><img src="src/images/heroi-nia.jpg" alt="Nia, pastora do vento" loading="lazy"><div class="heroi-corpo"><p class="papel">protagonista • 12 anos</p><h3>Nia, Pastora do Vento</h3><p style="color:var(--tinta-suave)">Perdeu o rebanho de nuvens num dia sem vento e jurou trazê-lo de volta. Toca ocarina torto, mas com coração.</p><div class="barra"><label>Coragem <span>82</span></label><div class="trilho"><i style="width:82%"></i></div></div><div class="barra"><label>Bondade <span>95</span></label><div class="trilho"><i style="width:95%"></i></div></div><div class="barra"><label>Culinária <span>60</span></label><div class="trilho"><i style="width:60%"></i></div></div><p style="font-size:14px">🎒 Companheira: <b>nuvenzinha Fuu</b> — chora chuva quando ri.</p></div></article>
+    <article class="heroi reveal"><img src="src/images/heroi-tobo.jpg" alt="Tobo, aprendiz de ferreiro" loading="lazy"><div class="heroi-corpo"><p class="papel">ferreiro • 10 anos</p><h3>Tobo, Martelo Doce</h3><p style="color:var(--tinta-suave)">Conserta de telhado a coração partido. Inventou o martelo-chocalho que acalma trovões-bebê.</p><div class="barra"><label>Força <span>88</span></label><div class="trilho"><i style="width:88%"></i></div></div><div class="barra"><label>Bondade <span>90</span></label><div class="trilho"><i style="width:90%"></i></div></div><div class="barra"><label>Culinária <span>75</span></label><div class="trilho"><i style="width:75%"></i></div></div><p style="font-size:14px">🎒 Companheiro: <b>tanuki Mochi</b> — dorme em cima do pão.</p></div></article>
+    <article class="heroi reveal"><img src="src/images/heroi-yaya.jpg" alt="Yaya, bruxinha da chuva" loading="lazy"><div class="heroi-corpo"><p class="papel">bruxa • 70 e poucos anos</p><h3>Vovó Yaya da Chuva</h3><p style="color:var(--tinta-suave)">Guarda 300 receitas de chá e um guarda-chuva-sapo. Chama todo mundo de “bolinho” e nunca erra um nome.</p><div class="barra"><label>Sabedoria <span>98</span></label><div class="trilho"><i style="width:98%"></i></div></div><div class="barra"><label>Bondade <span>100</span></label><div class="trilho"><i style="width:100%"></i></div></div><div class="barra"><label>Culinária <span>99</span></label><div class="trilho"><i style="width:99%"></i></div></div><p style="font-size:14px">🎒 Companheiro: <b>sapo Gota</b> — entrega cartas e fofocas.</p></div></article>
+  </div>
+</div></section>
+
+<section id="espiritos" style="padding-top:20px"><div class="wrap">
+  <span class="eyebrow reveal">✨ Bestiário afetivo</span>
+  <h2 class="sec-title reveal">Espíritos que viram amigos</h2>
+  <p class="sec-sub reveal">Nada de capturar à força. Aqui você oferece chá, ajuda e volta no dia seguinte. A amizade tem barra de progresso — e final feliz.</p>
+  <div class="esp-grid">
+    <div class="esp reveal"><div class="icone">🌟</div><h3>Fagulhas Lume</h3><p>Bebês de luz que se apagaram de medo. Acendem com sopa quente e história boa.</p><span class="raridade r-comum">comum • diurno</span></div>
+    <div class="esp reveal"><div class="icone">🌳</div><h3>Kodamas Suss</h3><p>Guardiões das árvores. Batem a cabecinha quando gostam de você. Fazem chocalho.</p><span class="raridade r-comum">comum • floresta</span></div>
+    <div class="esp reveal"><div class="icone">🐸</div><h3>Sapos-Correio</h3><p>Entregam cartas molhadas e pontuais. Aceitam pagamento em mosca-doce.</p><span class="raridade r-comum">comum • lago</span></div>
+    <div class="esp reveal"><div class="icone">☁️</div><h3>Nuvens-Bebê</h3><p>Choram chuva, riem arco-íris. Só confiam em quem divide o guarda-chuva.</p><span class="raridade r-raro">raro • céu</span></div>
+    <div class="esp reveal"><div class="icone">🍄</div><h3>Cogumelos-Lanterna</h3><p>Iluminam cavernas e segredos. Seguem quem canta baixinho no escuro.</p><span class="raridade r-raro">raro • caverna</span></div>
+    <div class="esp reveal"><div class="icone">🐈‍⬛</div><h3>Gatos de Vento</h3><p>Aparecem uma vez por estação. Se te escolherem, nunca mais há silêncio.</p><span class="raridade r-lendario">lendário • ???</span></div>
+    <div class="esp reveal"><div class="icone">🐌</div><h3>Caracóis Farol</h3><p>Cascos que guiam barcos perdidos. Adoram chá de erva-lua e elogios.</p><span class="raridade r-raro">raro • termas</span></div>
+    <div class="esp reveal"><div class="icone">🌑</div><h3>Poeiras Fufu</h3><p>Bolinhas pretas de fuligem com olhos curiosos. Roubam açúcar, devolvem sorte.</p><span class="raridade r-comum">comum • moinho</span></div>
+  </div>
+</div></section>
+
+<section id="sistemas"><div class="wrap">
+  <span class="eyebrow reveal">🎮 Como se joga</span>
+  <h2 class="sec-title reveal">Aconchego com sistema de verdade</h2>
+  <div class="sis-layout">
+    <div class="sis-foto reveal"><img src="src/images/cozinha.jpg" alt="Cozinha na casa da árvore" loading="lazy"><p class="hand" style="font-size:22px; margin-top:12px">a cozinha da Yaya — onde metade da magia acontece 🍲</p></div>
+    <div class="sis-lista">
+      <div class="sis reveal"><div class="ico">🌬️</div><div><h3>Vento vivo</h3><p>O vento é um personagem: empurra pipas, espalha sementes, muda com sua ocarina. Aprenda 12 canções para chamar brisa, chuva e estrela cadente.</p></div></div>
+      <div class="sis reveal"><div class="ico">🍳</div><div><h3>Cozinha afetiva</h3><p>140 receitas que curam, acalmam e befriendam. A sopa certa abre portas que espada nenhuma abre.</p></div></div>
+      <div class="sis reveal"><div class="ico">🌱</div><div><h3>Horta das estações</h3><p>Plante nabos redondos, abóboras cantantes e flores-lanterna. O jardim continua crescendo enquanto você dorme.</p></div></div>
+      <div class="sis reveal"><div class="ico">💌</div><div><h3>Vínculos, não níveis</h3><p>Suba de nível regando, cozinhando e visitando. NPCs mandam cartas, lembram do seu aniversário e guardam pudim para você.</p></div></div>
+      <div class="sis reveal"><div class="ico">🌙</div><div><h3>Dia, noite e festival</h3><p>Ciclo completo com 4 estações, chuva, nevoeiro e 9 festivais: Corrida de Sapos, Noite das Lanternas, Sopro do Vento...</p></div></div>
+      <div class="sis reveal"><div class="ico">🕊️</div><div><h3>Sem game over</h3><p>Se cair, um espírito te leva para casa com chá. Desafios existem — punição, não. Feito para jogar com calma, com filhos, com avós.</p></div></div>
+    </div>
+  </div>
+</div></section>
+
+<section id="demo"><div class="wrap">
+  <span class="eyebrow">🎲 Demo interativa — jogue aqui</span>
+  <h2 class="sec-title">Um gostinho do vale, no navegador</h2>
+  <p class="sec-sub">Três brincadeiras enquanto o jogo completo não sai: crie seu aventureiro, receba uma missão do oráculo e capture fagulhas no mini-jogo.</p>
+  <div class="demo-tabs">
+    <button id="tabAventureiroBtn" class="ativo" onclick="mostrarPainel('Aventureiro')">🌱 Criador de aventureiro</button>
+    <button id="tabOraculoBtn" onclick="mostrarPainel('Oraculo')">🔮 Oráculo de missões</button>
+    <button id="tabFagulhasBtn" onclick="mostrarPainel('Fagulhas')">✨ Capture as fagulhas</button>
+  </div>
+
+  <div class="painel ativo" id="painelAventureiro">
+    <h3 style="margin:0">Seu aventureiro do vale</h3>
+    <p style="color:var(--tinta-suave)">Aperte o botão e o vale escolhe para você. Vale imprimir e colar na geladeira.</p>
+    <div style="display:flex; gap:10px; flex-wrap:wrap; margin-top:12px">
+      <button class="btn btn-verde btn-mini" onclick="gerarAventureiro()">🎲 gerar aventureiro</button>
+      <button class="btn btn-creme btn-mini" onclick="copiarFicha()">⧉ copiar ficha</button>
+    </div>
+    <div class="ficha">
+      <div class="ficha-avatar" id="fichaAvatarEl">🌱</div>
+      <div><h3 id="fichaNomeEl">Aperte gerar...</h3><p id="fichaTextoEl">O vale está escolhendo sementes...</p><p class="hand" id="fichaExtraEl" style="font-size:22px; color:#3a6b3a"></p></div>
+    </div>
+  </div>
+
+  <div class="painel" id="painelOraculo">
+    <h3 style="margin:0">Oráculo do Grande Vento</h3>
+    <p style="color:var(--tinta-suave)">Toda vila tem um pedido. Toque a ocarina e receba sua missão de hoje.</p>
+    <button class="btn btn-verde btn-mini" onclick="gerarMissao()" style="margin-top:12px">🔮 pedir missão ao vento</button>
+    <div class="missao-caixa" id="missaoEl">O vento está quieto... peça uma missão.</div>
+  </div>
+
+  <div class="painel" id="painelFagulhas">
+    <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px">
+      <div><h3 style="margin:0">Capture as fagulhas ✨</h3><p style="margin:4px 0 0; color:var(--tinta-suave)">Toque nas luzinhas antes que se apaguem. 30 segundos. Mouse ou dedo.</p></div>
+      <button class="btn btn-verde btn-mini" id="fagulhaStartBtn" onclick="iniciarFagulhas()">▶ começar</button>
+    </div>
+    <div id="sparkCtn"><canvas id="sparkCanvas"></canvas><div class="spark-hud"><span id="sparkScoreEl">pontos: 0</span><span id="sparkTimeEl">tempo: 30s</span><span id="sparkMsgEl" class="hand" style="font-size:20px">toque em começar!</span></div></div>
+  </div>
+</div></section>
+
+<section id="galeria"><div class="wrap">
+  <span class="eyebrow reveal">🖼️ Galeria</span>
+  <h2 class="sec-title reveal">Postais do vale</h2>
+  <p class="sec-sub reveal">Quadros pintados pela nossa equipe de fundo — cada um vira papel de parede no jogo completo.</p>
+  <div class="gal-grid">
+    <figure class="reveal"><img src="src/images/hero-vale.jpg" alt="Vale" loading="lazy"><figcaption><span>Vale Verdejante</span><span>🌾</span></figcaption></figure>
+    <figure class="reveal"><img src="src/images/floresta.jpg" alt="Floresta" loading="lazy"><figcaption><span>Floresta Sussurrante</span><span>🌲</span></figcaption></figure>
+    <figure class="reveal"><img src="src/images/ilhas.jpg" alt="Ilhas" loading="lazy"><figcaption><span>Ilhas de Nimu</span><span>🪁</span></figcaption></figure>
+    <figure class="reveal"><img src="src/images/termas.jpg" alt="Termas" loading="lazy"><figcaption><span>Termas de Yoru</span><span>🏮</span></figcaption></figure>
+    <figure class="reveal"><img src="src/images/cozinha.jpg" alt="Cozinha" loading="lazy"><figcaption><span>Cozinha da Yaya</span><span>🍲</span></figcaption></figure>
+    <figure class="reveal"><img src="src/images/heroi-nia.jpg" alt="Nia" loading="lazy"><figcaption><span>Nia e Fuu</span><span>🌱</span></figcaption></figure>
+  </div>
+  <div class="reveal" style="margin-top:26px; background:#fff; border:2px solid var(--card-borda); border-radius:18px; padding:20px 22px; box-shadow:5px 5px 0 var(--card-borda)">
+    <h3 style="margin:0 0 8px">💬 O que dizem por aí</h3>
+    <p style="margin:0; line-height:1.7; color:var(--tinta-suave)">“Chorei com uma sopa num videogame. Não tenho vergonha.” — <b>Revista Piquenique</b> &nbsp;•&nbsp; “O RPG mais gentil desde que me entendo por gente.” — <b>Festival Indie Vento 2026, Júri</b> &nbsp;•&nbsp; “Minha filha befriendou um nabo. Eu befriendei o sono.” — <b>pai de dois, demo</b></p>
+  </div>
+</div></section>
+
+<section id="jogar" style="padding-top:20px"><div class="wrap">
+  <span class="eyebrow reveal">💾 Jogar</span>
+  <h2 class="sec-title reveal">Baixe a demo gratuita</h2>
+  <p class="sec-sub reveal">Capítulo 1 completo: Vila Pão-Quente + Floresta Sussurrante. 3 a 5 horas, sem cadastro, sem pressa. Salva na nuvem.</p>
+  <div class="jogar-box">
+    <div class="plataformas">
+      <div class="plat reveal"><span style="font-size:30px">💻</span><div style="flex:1"><b>PC • Windows / Mac / Linux</b><small>800 MB • PT-BR, EN, JP • controle ou teclado</small></div><a class="btn btn-verde btn-mini" href="#demo" onclick="baixarDemo('PC')">baixar</a></div>
+      <div class="plat reveal"><span style="font-size:30px">🎮</span><div style="flex:1"><b>Switch + consoles</b><small>chega no lançamento • demo já aprovada</small></div><a class="btn btn-creme btn-mini" href="#jogar" onclick="avisarLista('consoles')">avise-me</a></div>
+      <div class="plat reveal"><span style="font-size:30px">📱</span><div style="flex:1"><b>Mobile aconchego</b><small>toque para regar • jogue deitada na rede</small></div><a class="btn btn-creme btn-mini" href="#jogar" onclick="avisarLista('mobile')">avise-me</a></div>
+      <details class="reveal"><summary>⚙️ Requisitos mínimos</summary><p style="color:var(--tinta-suave)">Qualquer PC dos últimos 8 anos roda. 4 GB RAM, placa integrada, 1 GB livre. Roda até em netbook da escola — testamos com carinho.</p></details>
+      <details class="reveal"><summary>❓ É pago? Tem anúncio?</summary><p style="color:var(--tinta-suave)">Demo grátis para sempre. Jogo completo: pague uma vez, jogue para sempre. Sem anúncio, sem lootbox, sem moeda de vento. Só sopa.</p></details>
+      <details class="reveal"><summary>👨‍👩‍👧 É bom para crianças?</summary><p style="color:var(--tinta-suave)">Feito para isso. Sem morte, sem susto, com modo daltônico, legendas grandes e velocidade ajustável. Muitas famílias jogam juntas.</p></details>
+    </div>
+    <div class="news reveal">
+      <h3 style="margin:0; font-size:26px">💌 Clube do Pão-Quente</h3>
+      <p style="opacity:.85; line-height:1.6">Uma carta por mês: receita do jogo, espírito novo, papel de parede. Nada de spam — prometido pela Yaya.</p>
+      <input id="newsInput" type="email" placeholder="seu melhor e-mail">
+      <button class="btn btn-sol" style="width:100%; justify-content:center" onclick="assinarNews()">quero receber 🍞</button>
+      <p id="newsMsgEl" class="hand" style="font-size:22px; min-height:28px; margin:10px 0 0"></p>
+      <p style="font-size:13px; opacity:.7">Ao assinar você concorda em receber fofocas do sapo Gota. Cancele quando quiser.</p>
+    </div>
+  </div>
+</div></section>
+
+<footer><div class="wrap">
+  <div class="foot-grid">
+    <div><div class="logo" style="margin-bottom:10px"><span class="logo-marca">🌱</span><span><small>UM RPG DE ACONCHEGO</small><b style="font-family:'Fraunces',serif">Luméa</b></span></div><p style="opacity:.8; line-height:1.7; font-size:14px">Feito à mão por um time pequeno que acredita que cuidar é uma aventura. Aquarelas, pão fresco e vento. Demo no navegador feita com carinho nesta página.</p></div>
+    <div><b>Vale</b><br><br><a href="#sobre">História</a><br><a href="#mundo">Mundo</a><br><a href="#herois">Heróis</a><br><a href="#demo">Demo jogável</a></div>
+    <div><b>Caravana</b><br><br><a href="#jogar">Baixar demo</a><br><a href="#galeria">Postais</a><br><a href="#jogar">Clube do Pão-Quente</a><br><span style="opacity:.7; font-size:13px">PT-BR • feito com vento</span></div>
+  </div>
+  <p style="margin-top:30px; padding-top:18px; border-top:1px solid rgba(255,255,255,.2); font-size:13px; opacity:.7">© 2026 Estúdio Semente de Vento — obra original inspirada em filmes de fantasia e aconchego. Nenhum personagem deste site pertence a estúdio existente.</p>
+</div></footer>
+
+<button id="topoBtn" onclick="window.scrollTo({top:0,behavior:'smooth'})" title="voltar ao topo">↑</button>
+
+<script>
+// ---------- loader + reveal + topo ----------
+window.addEventListener('load', () => setTimeout(() => document.getElementById('loaderCtn').classList.add('hide'), 600));
+setTimeout(() => document.getElementById('loaderCtn').classList.add('hide'), 3500);
+const obs = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) e.target.classList.add('vis'); }), {threshold:.12});
+document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+window.addEventListener('scroll', () => {
+  document.getElementById('topoBtn').style.display = window.scrollY > 700 ? 'block' : 'none';
+}, {passive:true});
+
+// ---------- música ----------
+let tocando = false;
+async function alternarMusica(){
+  const a = document.getElementById('musicaEl');
+  const b = document.getElementById('musicaBtn');
+  try{
+    if (a.paused){ await a.play(); tocando = true; b.textContent = '⏸ pausar tema do vale'; b.classList.add('ativo'); }
+    else { a.pause(); tocando = false; b.textContent = '🎵 ouvir tema do vale'; b.classList.remove('ativo'); }
+  }catch(e){ b.textContent = '🔇 toque de novo p/ ouvir'; }
+}
+document.addEventListener('pointerdown', function libera(){ const a=document.getElementById('musicaEl'); if(a && a.paused && localStorage.getItem('lumea-musica')==='1'){ a.play().catch(()=>{}); } document.removeEventListener('pointerdown', libera); });
+
+// ---------- demo tabs ----------
+function mostrarPainel(nome){
+  ['Aventureiro','Oraculo','Fagulhas'].forEach(n => {
+    document.getElementById('painel'+n).classList.toggle('ativo', n===nome);
+    document.getElementById('tab'+n+'Btn').classList.toggle('ativo', n===nome);
+  });
+  if (nome==='Fagulhas') dimensionarCanvas();
+}
+
+// ---------- dados (espelham main.pjs) ----------
+const NOMES = ["Nia","Tobo","Yaya","Mimi","Sol","Noa","Lilo","Pema","Runa","Tao","Isa","Kiki"];
+const ORIGENS = ["do Vale Verdejante","da Floresta Sussurrante","das Ilhas de Nimu","das Termas de Yoru","do Moinho Alto","da Vila Pão-Quente","do Campo das Pipas","do Lago Espelho"];
+const VOCACOES = ["Pastora do Vento","Aprendiz de Ferreiro","Bruxinha da Chuva","Cozinheira de Névoa","Cartógrafa de Nuvens","Guardiã de Sementes","Pescadora de Luz","Contadora de Histórias"];
+const COMPAS = ["nuvenzinha tímida chamada Fuu","tanuki preguiçoso chamado Mochi","sapo-correio chamado Gota","fagulha falante chamada Lume","coruja-cogumelo chamada Plim","caracol-lanterna chamado Titi","kodama curioso chamado Suss","gatinho de vento chamado Vuu"];
+const TRACOS = ["ri alto quando está nervosa","guarda pedrinhas brilhantes no bolso","fala com as plantas toda manhã","desenha mapas nas margens dos livros","divide sempre o pão com alguém","canta para chamar o vento","tem medo de trovão, mas finge coragem","coleciona cheiros em potinhos"];
+const PRATOS = ["sopa de abóbora da vovó","pão-nuvem com mel de cedro","onigiri de cogumelo brilhante","chá de erva-lua com biscoito de vento","torta de maçã do moinho","macarrão das termas com ovo sorridente","bolo de arroz com flores doces"];
+const AVATARES = ["🌱","🍞","🐸","☁️","🍄","🐌","🦉","🌟"];
+const PEDIDOS = ["uma vovó perdeu suas sementes cantantes","um kodama está triste e não quer brilhar","a pipa do festival voou para as ilhas","a sopa das termas perdeu o tempero secreto","um bebê-espírito está com soluços de trovão","o moinho parou porque o vento dormiu","as lanternas do lago apagaram de vergonha","um tanuki trocou todas as placas da vila"];
+const LOCAIS = ["na Floresta Sussurrante","nas Ilhas Flutuantes de Nimu","nas Termas de Yoru","no Vale Verdejante","no Moinho Alto","no Lago Espelho","na Vila Pão-Quente","no Campo das Pipas"];
+const RECOMP = ["um abraço quentinho + pão-nuvem","uma canção nova para sua ocarina","um chapéu feito de folha gigante","um pote de mel de cedro","um mapa rabiscado com um X misterioso","uma lanterna que nunca apaga","uma receita secreta da vovó Yaya","um dente-de-leão que realiza um sopro"];
+const pick = a => a[Math.floor(Math.random()*a.length)];
+
+function gerarAventureiro(){
+  const nome = pick(NOMES), origem = pick(ORIGENS), voc = pick(VOCACOES);
+  const comp = pick(COMPAS), traco = pick(TRACOS), prato = pick(PRATOS);
+  document.getElementById('fichaAvatarEl').textContent = pick(AVATARES);
+  document.getElementById('fichaNomeEl').textContent = nome + ' ' + origem;
+  document.getElementById('fichaTextoEl').innerHTML =
+    '<b>Vocação:</b> ' + voc + '<br><b>Companheiro:</b> ' + comp +
+    '<br><b>Traço doce:</b> ' + traco + '<br><b>Prato favorito:</b> ' + prato;
+  document.getElementById('fichaExtraEl').textContent = '“O vale lembra de quem planta, ' + nome + '.”';
+}
+function copiarFicha(){
+  const t = document.getElementById('fichaNomeEl').textContent + ' — ' + document.getElementById('fichaTextoEl').innerText;
+  navigator.clipboard.writeText(t).then(()=>{
+    document.getElementById('fichaExtraEl').textContent = 'ficha copiada! cole no caderno 📋';
+  }).catch(()=>{});
+}
+function gerarMissao(){
+  const el = document.getElementById('missaoEl');
+  el.innerHTML = '🍃 <b>Missão do dia:</b> ' + pick(PEDIDOS) + ' <b>' + pick(LOCAIS) + '</b>.<br>⛺ <b>Recompensa:</b> ' + pick(RECOMP) + '.';
+  el.style.transform = 'scale(.98)'; setTimeout(()=>el.style.transform='',150);
+}
+function baixarDemo(pl){ alert('Demo de ' + pl + ': o capítulo 1 já está jogável aqui na seção Demo! O download completo chega no lançamento. 🌱'); }
+function avisarLista(nome){ alert('Anotado! Avisaremos quando chegar em ' + nome + '. 💌'); }
+function assinarNews(){
+  const v = document.getElementById('newsInput').value.trim();
+  const m = document.getElementById('newsMsgEl');
+  if (!v || !v.includes('@')){ m.textContent = 'hmm, esse e-mail parece um bolo cru... tente de novo?'; return; }
+  try{ localStorage.setItem('lumea-news', v); }catch(e){}
+  m.textContent = 'bem-vinda à caravana! primeira carta a caminho 🍞';
+  document.getElementById('newsInput').value = '';
+}
+
+// ---------- mini-jogo fagulhas ----------
+const canvas = document.getElementById('sparkCanvas');
+const ctx = canvas.getContext('2d');
+let orbes = [], pontos = 0, tempo = 30, rodando = false, timerId = null, rafId = null;
+function dimensionarCanvas(){
+  const r = document.getElementById('sparkCtn').getBoundingClientRect();
+  const w = Math.max(300, r.width - 4);
+  canvas.width = w; canvas.height = 380;
+  desenharFundo();
+}
+function desenharFundo(){
+  const g = ctx.createLinearGradient(0,0,0,canvas.height);
+  g.addColorStop(0,'#1c3a2a'); g.addColorStop(1,'#0e2016');
+  ctx.fillStyle = g; ctx.fillRect(0,0,canvas.width,canvas.height);
+  ctx.fillStyle = 'rgba(255,255,255,.5)';
+  for(let i=0;i<60;i++){ ctx.fillRect(Math.random()*canvas.width, Math.random()*canvas.height, 2, 2); }
+}
+function novaOrbe(){
+  return { x: 30+Math.random()*(canvas.width-60), y: 30+Math.random()*(canvas.height-60),
+    r: 14+Math.random()*12, vida: 90+Math.random()*60, max: 150, cor: Math.random()<.25 ? '#e9c46a' : '#fff6b8' };
+}
+function iniciarFagulhas(){
+  dimensionarCanvas();
+  orbes = []; pontos = 0; tempo = 30; rodando = true;
+  document.getElementById('sparkScoreEl').textContent = 'pontos: 0';
+  document.getElementById('sparkMsgEl').textContent = 'toque nas luzinhas!';
+  document.getElementById('fagulhaStartBtn').textContent = '↻ recomeçar';
+  clearInterval(timerId);
+  timerId = setInterval(()=>{
+    tempo--;
+    document.getElementById('sparkTimeEl').textContent = 'tempo: ' + tempo + 's';
+    if (tempo<=0) terminarFagulhas();
+  }, 1000);
+  cancelAnimationFrame(rafId);
+  loopFagulhas();
+}
+function terminarFagulhas(){
+  rodando = false; clearInterval(timerId); cancelAnimationFrame(rafId);
+  let msg = pontos < 8 ? 'as fagulhas gostaram de você... volte com chá! 🍵' : pontos < 18 ? 'o vale brilha mais com você! 🌟' : 'lendário! os Gatos de Vento te viram! 🐈';
+  document.getElementById('sparkMsgEl').textContent = pontos + ' pontos — ' + msg;
+}
+function loopFagulhas(){
+  if(!rodando) return;
+  desenharFundo();
+  if (orbes.length < 6 && Math.random() < .25) orbes.push(novaOrbe());
+  const agora = performance.now();
+  orbes.forEach(o => {
+    o.vida--;
+    const pulso = 1 + Math.sin(agora/220 + o.x)*.15;
+    const alpha = Math.max(0, Math.min(1, o.vida/50));
+    ctx.globalAlpha = alpha;
+    const grad = ctx.createRadialGradient(o.x,o.y,2,o.x,o.y,o.r*pulso);
+    grad.addColorStop(0,'#fff'); grad.addColorStop(.4,o.cor); grad.addColorStop(1,'rgba(255,240,150,0)');
+    ctx.fillStyle = grad;
+    ctx.beginPath(); ctx.arc(o.x,o.y,o.r*pulso,0,Math.PI*2); ctx.fill();
+    ctx.globalAlpha = 1;
+    ctx.fillStyle = '#22301f';
+    ctx.beginPath(); ctx.arc(o.x-4,o.y-2,2.2,0,Math.PI*2); ctx.arc(o.x+4,o.y-2,2.2,0,Math.PI*2); ctx.fill();
+  });
+  orbes = orbes.filter(o => o.vida > 0);
+  rafId = requestAnimationFrame(loopFagulhas);
+}
+function toqueFagulha(clientX, clientY){
+  if(!rodando) return;
+  const r = canvas.getBoundingClientRect();
+  const x = (clientX - r.left) * (canvas.width / r.width);
+  const y = (clientY - r.top) * (canvas.height / r.height);
+  for(let i=orbes.length-1;i>=0;i--){
+    const o = orbes[i];
+    const d = Math.hypot(o.x-x, o.y-y);
+    if (d < o.r+14){
+      orbes.splice(i,1);
+      pontos++;
+      document.getElementById('sparkScoreEl').textContent = 'pontos: ' + pontos;
+      break;
+    }
+  }
+}
+canvas.addEventListener('pointerdown', e => toqueFagulha(e.clientX, e.clientY));
+window.addEventListener('resize', ()=>{ if(document.getElementById('painelFagulhas').classList.contains('ativo')) dimensionarCanvas(); });
+gerarAventureiro();
+gerarMissao();
+dimensionarCanvas();
+
+// poeirinhas fufu que seguem o mouse
+const fufus = [];
+for(let i=0;i<5;i++){
+  const s = document.createElement('div');
+  s.className = 'susuwatari'; s.textContent = '●';
+  s.style.color = '#222'; s.style.opacity = '.55';
+  s.style.left = (10+i*6)+'vw'; s.style.top = (20+i*12)+'vh';
+  document.body.appendChild(s); fufus.push(s);
+}
+document.addEventListener('pointermove', e => {
+  fufus.forEach((f,i)=>{
+    const dx = (e.clientX/window.innerWidth - .5) * (8+i*3);
+    const dy = (e.clientY/window.innerHeight - .5) * (8+i*3);
+    f.style.transform = 'translate(' + dx + 'px,' + dy + 'px)';
+  });
+}, {passive:true});
+</script>
